@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1722067401 "c:/Users/kevin/LaborEconomicsII/LaborEcon_hw1.tex" "LaborEcon_hw1.pdf" "LaborEcon_hw1" 1722067403 0
+["pdflatex"] 1722068080 "c:/Users/kevin/LaborEconomicsII/LaborEcon_hw1.tex" "LaborEcon_hw1.pdf" "LaborEcon_hw1" 1722068082 0
   "C:/Users/kevin/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1721482211 237354 819feaa128156a78909a999df04a0ae8 ""
   "C:/Users/kevin/AppData/Local/MiKTeX/fonts/tfm/public/rsfs/rsfs10.tfm" 1719318483 688 37338d6ab346c2f1466b29e195316aa4 ""
   "C:/Users/kevin/AppData/Local/MiKTeX/fonts/tfm/public/rsfs/rsfs5.tfm" 1719318484 684 3a51bd4fd9600428d5264cf25f04bb9a ""
@@ -209,10 +209,10 @@
   "C:/Users/kevin/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "C:/Users/kevin/MiKTeX/tex/latex/xcolor/xcolor.sty" 1656236890 56148 51a9a8571c07b9921892ae11063ae853 ""
   "C:/Users/kevin/MiKTeX/tex/latex/xkeyval/xkeyval.sty" 1656236919 4937 4ce600ce9bd4ec84d0250eb6892fcf4f ""
-  "LaborEcon_hw1.aux" 1722067403 2337 e6390be3f64a17367a8ec1bfdcb9beff "pdflatex"
-  "LaborEcon_hw1.out" 1722067403 583 35116e9da2efa35c23fc71e8f62a0604 "pdflatex"
-  "LaborEcon_hw1.tex" 1722067401 9400 2c0f98ee0e47e8e5f13aec7124d46650 ""
-  "c:/Users/kevin/LaborEconomicsII/LaborEcon_hw1.tex" 1722067401 9400 2c0f98ee0e47e8e5f13aec7124d46650 ""
+  "LaborEcon_hw1.aux" 1722068081 2337 e6390be3f64a17367a8ec1bfdcb9beff "pdflatex"
+  "LaborEcon_hw1.out" 1722068081 583 35116e9da2efa35c23fc71e8f62a0604 "pdflatex"
+  "LaborEcon_hw1.tex" 1722068076 9400 2c0f98ee0e47e8e5f13aec7124d46650 ""
+  "c:/Users/kevin/LaborEconomicsII/LaborEcon_hw1.tex" 1722068076 9400 2c0f98ee0e47e8e5f13aec7124d46650 ""
   "prefix.tex" 1722049216 8450 d3fbfe8c090d9b8e751b7399147497ef ""
   "symbols.tex" 1720144877 1091 8dc8100a4286f75ebb349593baea675f ""
   (generated)
