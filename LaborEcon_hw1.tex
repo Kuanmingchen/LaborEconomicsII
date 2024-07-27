@@ -33,6 +33,7 @@ type \texttt{]add PackageName} to install the package
 Illustrate the procedure of investigating the economic 
 questions via the structural model approach.
 
+%\begin{comment}
 \begin{sol}[2]
     In general, the structural model approach consists of four 
     steps:
@@ -55,7 +56,7 @@ questions via the structural model approach.
     research.
     \solend
 \end{sol}
-
+%\end{comment}
 
 \section{Robinson Crusoe's Coconuts}
 Robinson Crusoe finds $z_0$ units of coconut on the beach in 
@@ -87,6 +88,8 @@ Crusoe's prblem is thus formulated as follows:
     Solve the optimal consumption $c^*_0$ corresponding to 
     $z_0$ analytically.
 \end{enumerate}
+
+%\begin{comment}
 \begin{sol}[3.1]
     The value function is 
     \begin{equation*}
@@ -98,6 +101,9 @@ Crusoe's prblem is thus formulated as follows:
     \end{equation*}
     \solend
 \end{sol}
+%\end{comment}
+
+%\begin{comment}
 \begin{sol}[3.2]
     The F.O.C. is 
     \begin{equation*}
@@ -109,6 +115,9 @@ Crusoe's prblem is thus formulated as follows:
     \end{equation*}
     \solend
 \end{sol}
+%\end{comment}
+
+%\begin{comment}
 \begin{sol}[3.3]
     Rearranging the F.O.C. yields 
     \begin{equation*}
@@ -126,6 +135,9 @@ Crusoe's prblem is thus formulated as follows:
     \end{equation*}
     \solend
 \end{sol}
+%\end{comment}
+
+%\begin{comment}
 \begin{sol}[3.4]
     Taking the limit as $T\to\infty$, the value function is 
     \begin{equation*}
@@ -145,6 +157,7 @@ Crusoe's prblem is thus formulated as follows:
     by taking $T\to\infty$.
     \solend
 \end{sol}
+%\end{comment}
 
 \section{McCall's Job Search Model}
 A worker is finding a job. In each period, the worker receives 
@@ -176,6 +189,8 @@ is
     the simulation in problem 5 for different value of $\underbar{c}$. Explain 
     your results.
 \end{enumerate}
+
+%\begin{comment}
 \begin{sol}[4.1]
     The Bellman equation is 
     \begin{equation*}
@@ -184,6 +199,9 @@ is
     where $F$ is the CDF of $Beta(\alpha,\beta)$.
     \solend
 \end{sol}
+%\end{comment}
+
+%\begin{comment}
 \begin{sol}[4.2]
     The Bellman operator is 
     \begin{equation*}
@@ -217,6 +235,9 @@ is
         \Bar{w} = (1-\rho)\underbar{c} + \rho \int \max\brc{w', \Bar{w}} F(dw').
     \end{equation*}
 \end{sol}
+%\end{comment}
+
+%\begin{comment}
 \begin{sol}[4.2. Conti]
     Define the new operator $U$ defined on $[0,1]$ as 
     \begin{equation*}
@@ -233,10 +254,18 @@ is
             &\leq \rho \int\abs{\Bar{w}_1-\Bar{w}_2} F(dw') = \rho \abs{\Bar{w}_1-\Bar{w}_2}\int F(dw') = \rho \abs{\Bar{w}_1-\Bar{w}_2}.
         \end{aligned}
     \end{equation*}
+    Thus $U$ is a contraction mapping.\\ 
+    Once we obtain the reservation wage, the decision rule becomes 
+    obvious: accept the offer if $w\geq\Bar{w}$ and reject it otherwise. 
+    We also implement this approach in the Julia code.  
     \solend
 \end{sol}
+%\end{comment}
+
+%\begin{comment}
 \begin{sol}[4.3, 4.4, 4.5, 4.6]
     See the Julia code file.
     \solend 
 \end{sol}
+%\end{comment}
 \end{document}
