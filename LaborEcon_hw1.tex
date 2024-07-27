@@ -53,6 +53,7 @@ questions via the structural model approach.
     steps. However, one should always keep in mind that the 
     counterfactual analysis is the ultimate goal of the entire 
     research.
+    \solend
 \end{sol}
 
 
@@ -95,6 +96,7 @@ Crusoe's prblem is thus formulated as follows:
     \begin{equation*}
         v(z, t) = \max_{c_{t}} \brc{u(c_t) + \beta v(z-c_t, t+1)}.
     \end{equation*}
+    \solend
 \end{sol}
 \begin{sol}[3.2]
     The F.O.C. is 
@@ -105,6 +107,7 @@ Crusoe's prblem is thus formulated as follows:
     \begin{equation*}
         \frac{1}{2\sqrt{c_t}} = \beta \frac{1}{2\sqrt{c_{t+1}}}.
     \end{equation*}
+    \solend
 \end{sol}
 \begin{sol}[3.3]
     Rearranging the F.O.C. yields 
@@ -121,6 +124,7 @@ Crusoe's prblem is thus formulated as follows:
     \begin{equation*}
         c^*_0 = \frac{z_0(1-\beta^2)}{1-\beta^{2(T+1)}}.
     \end{equation*}
+    \solend
 \end{sol}
 \begin{sol}[3.4]
     Taking the limit as $T\to\infty$, the value function is 
@@ -139,6 +143,7 @@ Crusoe's prblem is thus formulated as follows:
         c^*_0 = z_0(1-\beta^2)
     \end{equation*}
     by taking $T\to\infty$.
+    \solend
 \end{sol}
 
 \section{McCall's Job Search Model}
@@ -174,6 +179,7 @@ is
         v(w) = \max \brc{\frac{w}{1-\rho}, \underbar{c} + \rho \int v(w') F(dw')},
     \end{equation*}
     where $F$ is the CDF of $Beta(\alpha,\beta)$.
+    \solend
 \end{sol}
 \begin{sol}[4.2]
     The Bellman operator is 
@@ -191,7 +197,7 @@ is
             &= \rho \int \norm{v_1 - v_2} F(dw') = \rho \norm{v_1 - v_2}.
         \end{aligned}
     \end{equation*}
-    Thus $T$ is a contraction mapping. \hfill\ensuremath{\myqedsymbol} \\
+    Thus $T$ is a contraction mapping. \solend \\
     \textit{An Alternative Approach:} \\
     One may observe that there exists a ``reservation wage'', $\Bar{w}$, 
     where the worker is indifferent between accepting and rejecting the 
@@ -224,8 +230,10 @@ is
             &\leq \rho \int\abs{\Bar{w}_1-\Bar{w}_2} F(dw') = \rho \abs{\Bar{w}_1-\Bar{w}_2}\int F(dw') = \rho \abs{\Bar{w}_1-\Bar{w}_2}.
         \end{aligned}
     \end{equation*}
+    \solend
 \end{sol}
 \begin{sol}[4.3, 4.4, 4.5]
-    See the Julia code file. 
+    See the Julia code file.
+    \solend 
 \end{sol}
 \end{document}
