@@ -1,0 +1,64 @@
+\documentclass[12pt]{article}
+\input{prefix.tex}%
+\input{symbols.tex}
+
+\title{
+    Labor Economics Homework 2 \\
+    \large Due: \\
+    }
+
+\author{}
+
+\date{}
+
+\begin{document}
+\setstretch{1.2}
+
+\maketitle
+
+\section{Robinson Crusoe's Coconuts Revisited}
+Recall our settings from homework 1. This time, 
+Robinson Crusoe's utility is a CRRA function 
+\begin{equation*}
+    u(c; \gamma) = \lim_{\gamma'\to\gamma}\frac{c^{1-\gamma'}}{1-\gamma'}
+\end{equation*}
+with $\gamma\geq 0$. At the beginning of each period 
+$t$, Crusoe owns $y_t$ coconuts. He 
+can either consume them or plant them. If he plants 
+$k_{t+1}$ coconuts, he will obtain $y_{t+1} = 
+z_{t+1}f(k_{t+1})$ coconuts in the next period, where 
+$z_{t+1}\overset{iid}{\sim} Lognormal(\mu,\sigma^2)$. 
+The coconuts rot after each period, thus $k_t$ 
+is fully depreciated. We assume that $f(k) = 
+k^\alpha$ with $\alpha \in (0,1)$. With discount 
+factor $\beta\in(0,1)$, Crusoe's problem is 
+\begin{equation*}
+    \max_{\{c_t,k_{t+1}\}_{t=0}^\infty} \sum_{t=0}^\infty 
+    \E_0\sbrc{\beta^t u(c_t)} \quad \text{s.t.} \quad 
+    c_t + k_{t+1} = y_t \quad \text{and} \quad y_{t+1} = 
+    z_{t+1}f(k_{t+1})
+\end{equation*} 
+\begin{enumerate}
+    \item Write down the Bellman equation and define the Bellman operator. 
+    \item Show that the Bellman operator is a contraction mapping.\\
+    (Hint: Verify the Blackwell's sufficient conditions.)
+    \item Given $\alpha = 0.8$, $\beta = 0.96$, $\gamma = 1$, $\mu = 0.0$, $\sigma = 0.3$. 
+    Solve the model by value function iteration for $y\in(0,10)$.\\
+    (Hint: You may use the linear interpolation and monte carlo simulation to 
+    approximate the expectation of $v$.)
+    \item The model has a famous closed-form solution with $\gamma = 1$:
+    \begin{equation*}
+        c^*(y) = (1-\alpha\beta)y.
+    \end{equation*}
+    Plot the consumption policies for the analytical and numerical solutions. 
+    Does your the numerical solution fit the analytical solution well?
+    \item An agent is called \textbf{prudent} if $u'''(\cdot) > 0$. Show that 
+    an agent with CRRA utility is prudent if $\gamma > 0$. Now solve the model 
+    for $\sigma = 0.1, 0.015, 0.2, 0.25$ and $0.3$ with $\gamma = 1.5$. 
+    Plot the consumption policies for different $\sigma$. What does the 
+    prudent preference mean? Explain your findings.
+\end{enumerate}
+
+
+
+\end{document}
