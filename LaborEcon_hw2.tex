@@ -15,6 +15,7 @@
 \setstretch{1.2}
 
 \maketitle
+\vspace{-2cm}
 
 \section{Robinson Crusoe's Coconuts Revisited}
 Recall our settings from homework 1. This time, 
@@ -48,15 +49,16 @@ factor $\beta\in(0,1)$, Crusoe's problem is
     approximate the expectation of $v$.)
     \item Given the same parameters, solve the model by policy function 
     iteration. 
-    \item Given the same parameters, solve the model by the endogenous grid 
-    method. Compare the running time of the three methods using macro 
+    \item Given the same parameters, solve the model by envelope condition 
+    methods. Use both the exogenous grids and the endogenous grids.  
+    Compare the running time of the four methods using macro 
     \texttt{@benchmark} in Julia. 
     \item The model has a famous closed-form solution with $\gamma = 1$:
     \begin{equation*}
         c^*(y) = (1-\alpha\beta)y.
     \end{equation*}
     Plot the consumption policies for the analytical and numerical solutions. 
-    Do your the numerical solutions fit the analytical one well?
+    Do your numerical solutions fit the analytical one well?
     \item Solve the model for $\sigma = 0.1, 0.015, 0.2, 0.25$ and $0.3$ with 
     $\gamma = 1.5$. Plot the consumption policies for different $\sigma$. 
     Explain your findings. 
