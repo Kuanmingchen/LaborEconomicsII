@@ -46,17 +46,20 @@ factor $\beta\in(0,1)$, Crusoe's problem is
     Solve the model by value function iteration for $y\in(0,10)$.\\
     (Hint: You may use the linear interpolation and monte carlo simulation to 
     approximate the expectation of $v$.)
+    \item Given the same parameters, solve the model by policy function 
+    iteration. 
+    \item Given the same parameters, solve the model by the endogenous grid 
+    method. Compare the running time of the three methods using macro 
+    \texttt{@benchmark} in Julia. 
     \item The model has a famous closed-form solution with $\gamma = 1$:
     \begin{equation*}
         c^*(y) = (1-\alpha\beta)y.
     \end{equation*}
     Plot the consumption policies for the analytical and numerical solutions. 
-    Does your the numerical solution fit the analytical solution well?
-    \item An agent is \textbf{prudent} if $u'''(\cdot) > 0$. Show that 
-    an agent with CRRA utility is prudent if $\gamma > 0$. Now solve the model 
-    for $\sigma = 0.1, 0.015, 0.2, 0.25$ and $0.3$ with $\gamma = 1.5$. 
-    Plot the consumption policies for different $\sigma$. What does the 
-    prudent preference mean? Explain your findings.
+    Do your the numerical solutions fit the analytical one well?
+    \item Solve the model for $\sigma = 0.1, 0.015, 0.2, 0.25$ and $0.3$ with 
+    $\gamma = 1.5$. Plot the consumption policies for different $\sigma$. 
+    Explain your findings. 
 \end{enumerate}
 
 
