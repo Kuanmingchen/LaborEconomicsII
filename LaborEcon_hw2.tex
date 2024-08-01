@@ -54,30 +54,36 @@ factor $\beta\in(0,1)$, Crusoe's problem is
     Compare the running time of the four methods using macro 
     \texttt{@benchmark} in Julia. 
     \item The model has a famous closed-form solution with $\gamma = 1$:
+    \vspace{-1em}
     \begin{equation*}
         c^*(y) = (1-\alpha\beta)y.
     \end{equation*}
     Plot the consumption policies for the analytical and numerical solutions. 
     Do your numerical solutions fit the analytical one well?
-    \item Solve the model for $\sigma = 0.1, 0.015, 0.2, 0.25$ and $0.3$ with 
+    \item Solve the model for $\sigma = 0.1, 0.15, 0.2, 0.25$ and $0.3$ with 
     $\gamma = 1.5$. Plot the consumption policies for different $\sigma$. 
     Explain your findings. 
 \end{enumerate}
 
+%\begin{comment}
 \begin{sol}[1.1]
     The Bellman equation is 
+    \vspace{-1em}
     \begin{equation*}
         v(y) = \max_{c} u(c) + \beta \int v(zf(y-c)) F(dz),
     \end{equation*}
-    where $F$ stands for the CDF of $z$. The Bellman operator is 
+    where $F$ stands for the CDF of $z$. The Bellman operator is
+    \vspace{-0.5em} 
     \begin{equation*}
         (Tv)(y) = \max_{c} u(c) + \beta \int v(zf(y-c)) F(dz).
     \end{equation*}
     \solend
 \end{sol}
+%\end{comment}
 
+%\begin{comment}
 \begin{sol}[1.2]
-    We are going to check the conditions in Blackwell's Theorem are 
+    We are going to check the conditions in Blackwell's theorem are 
     satisfied. First, if $v\leq w$, $v,w\in B(X)$, let $c_v$ and 
     $c_w$ be the optimal in Bellman equations for $v$ and $w$, respectively. 
     Then 
@@ -102,5 +108,11 @@ factor $\beta\in(0,1)$, Crusoe's problem is
     the proof.
     \solend
 \end{sol}
+%\end{comment}
 
+%\begin{comment}
+\begin{sol}[1.3, 1.4, 1.5, 1.6, 1.7]
+    See the Julia code file.
+\end{sol}
+%\end{comment}
 \end{document}

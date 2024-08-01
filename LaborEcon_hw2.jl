@@ -60,6 +60,20 @@ end
 
 sol = VFI(zeros(length(OG.y_grids)))
 
+# Define T_policy
+function T_policy(v; OG = OG, policy = policy)
+    @unpack β, α, γ, μ, σ, y_grids, z, u, f = OG
+    v_new = similar(policy)
+    v_func = LinearInterpolation(y_grids, v, extrapolation_bc = Line())
+    for (i, y) in enumerate(y_grids)
+        v_new[i] = u(policy[i]) + β * mean(v_func.(z .* f(y - policy[i])))
+    end
+    return v_new
+end
+
+# Solve the model using policy function iteration 
+
+
 # Plot the policy function 
 begin
     fig = Figure()
