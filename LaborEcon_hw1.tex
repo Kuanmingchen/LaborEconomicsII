@@ -224,7 +224,9 @@ is
     defined on $[0,1]$ with the supremum norm.\\
     (Hint: $\abs{\max\brc{a,b}-\max\brc{a,c}}\leq\abs{b-c}$ for real $a,b,c$.)
     \item Given $\rho = 0.95$, $\underbar{c} = 0.1$, $\alpha = 2$, 
-    and $\beta = 5$, solve the model numerically.
+    and $\beta = 5$, solve the model numerically.\\
+    (Hint: You may use the linear interpolation and monte carlo simulation to 
+    approximate the expectation of $v$.)
     \item Plot the value function and the optimal policy function as functions 
     of $w$. What is the reservation wage? 
     \item Simulate the model for 1000 homogeneous agents. Plot the distribution 
@@ -236,7 +238,8 @@ is
 
 %\begin{comment}
 \begin{sol}[4.1]
-    The Bellman equation is 
+    The Bellman equation is
+    \vspace{-1em}
     \begin{equation*}
         v(w) = \max \brc{\frac{w}{1-\rho}, \underbar{c} + \rho \int v(w') F(dw')},
     \end{equation*}
@@ -248,11 +251,13 @@ is
 %\begin{comment}
 \begin{sol}[4.2]
     The Bellman operator is 
+    \vspace{-1em}
     \begin{equation*}
         (Tv)(w) = \max \brc{\frac{w}{1-\rho}, \underbar{c} + \rho \int v(w') F(dw')}.
     \end{equation*}
     Now let $v_1$ and $v_2$ be two bounded continuous functions on $[0,1]$ and 
     $\norm{\cdot}$ denote the supremum norm. Then
+    \vspace{-1em}
     \begin{equation*}
         \begin{aligned}
             \norm{Tv_1 - Tv_2} &= \sup_{w\in[0,1]}\Bigg\lvert\max\brc{\frac{w}{1-\rho}, \underbar{c} + \rho \int v_1(w') F(dw')}\\ 
