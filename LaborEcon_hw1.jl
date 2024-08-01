@@ -129,3 +129,24 @@ end
 
 # We see that the reservation wage increases with c̲. As c̲ increases, the worker becomes 
 # more patient and is willing to wait for a higher wage.
+
+# The above is the code for the alternative approach to solve the 
+# McCall model using value function iteration. 
+# Reset the model
+model = McCall()
+function U(w̄; model = model)
+    @unpack ρ, c̲, α, β, ϵ, w_grids = model
+    return [(1-ρ)*c̲ + ρ*mean(max.(ϵ, w̄[1]))] 
+end
+
+function VFI_2(w̄; model = model, tol = 1e-10, max_iter = 1000)
+    @unpack ρ, c̲, α, β, ϵ, w_grids = model
+    res = fixedpoint(w̄ -> U(w̄), [w̄]; iterations = max_iter, xtol = tol)
+    return (res_wage = res.zero, iter = res.iterations)
+end
+
+w̄ = VFI_2(0.5)
+
+# As long as the reservation wage is obtained, the policy function
+# is then clear. The worker will accept the wage offer if it is 
+# higher than the reservation wage, and reject otherwise. 
