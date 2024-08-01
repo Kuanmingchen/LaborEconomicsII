@@ -30,33 +30,77 @@ type \texttt{]add PackageName} to install the package
 \url{https://julia.quantecon.org/intro.html}.
 
 \section{Methodology}
-Illustrate the procedure of investigating the economic 
-questions via the structural model approach.
+Suppose that you are a restaurant owner and you are considering 
+increasing the price. You know that the customers' preference 
+can be represented by 
+\begin{equation*}
+    u_i(x, y) = \frac{\epsilon_i}{1-\epsilon_i}\log (x) + \log (y), 
+\end{equation*}
+where $x$ is the restaurant's food and $y$ represents the other 
+goods. $\epsilon_i\overset{iid}{\sim}Beta(\alpha, \beta)$ is an 
+unobserved term, and you do not observe $\alpha$ and $\beta$ 
+either. Each customer $i$ faces the budget constraint
+\begin{equation*}
+    p x + y \leq w_i,
+\end{equation*}
+where the price of the other foods is normalized to 1. To 
+simplify the problem, assume that $w_i = 1$ for all $i$.
+\begin{enumerate}
+    \item Solve for the demand of $x_i$.
+    \item After surveying the customers, you obtain the data 
+    $\set{x_i}_{i=1}^N$. Write down the maximum likelihood estimator 
+    of $\alpha$ and $\beta$.
+    \item Suppose that you have estimated $\alpha$ and $\beta$. 
+    How much, on average, would the demand of $x_i$ be if you 
+    set the price to $p'$?
+\end{enumerate}
 
 %\begin{comment}
-\begin{sol}[2]
-    In general, the structural model approach consists of four 
-    steps:
-    \begin{enumerate}
-        \item \textbf{Modeling:} Formulate the economic problem 
-        and the environment. 
-        \item \textbf{Solving:} Solve the model to obtain the 
-        policy functions or the equilibrium. 
-        \item \textbf{Estimation:} Estimate the model parameters
-        using the obtained policy functions or the equilibrium and 
-        the data. Find the parameters that produce the best fits 
-        between the model and the data. 
-        \item \textbf{Counterfactual Analysis:} Conduct the 
-        policy experiments. For example, one may ask what if 
-        the minimum wage increases by 10\%?
-    \end{enumerate}
-    Typically the most difficult parts are the solving and the estimation 
-    steps. However, one should always keep in mind that the 
-    counterfactual analysis is the ultimate goal of the entire 
-    research.
+\begin{sol}[2.1]
+    The F.O.C.\ is 
+    \begin{equation*}
+        \left\{
+        \begin{aligned}
+            \frac{\epsilon_i}{1-\epsilon_i}\frac{1}{x_i} &= \lambda p, \\
+            \frac{1}{y_i} &= \lambda, \\
+            p x_i + y_i &= 1.
+        \end{aligned}
+        \right .
+    \end{equation*}
+    Solving the system of equations yields 
+    \begin{equation*}
+        x_i = \frac{\epsilon_i}{p}.
+    \end{equation*}
+    This is the demand for the customer $i$.
     \solend
 \end{sol}
 %\end{comment}
+
+%\begin{comment}
+\begin{sol}[2.2]
+    Let $f(\cdot;\alpha, \beta)$ be the density of $Beta(\alpha, \beta)$. 
+    The likelihood function is 
+    \begin{equation*}
+        L(\alpha, \beta) = \prod_{i=1}^N f(\epsilon_i;\alpha, \beta) = \prod_{i=1}^{N} f(p x_i;\alpha, \beta).
+    \end{equation*}
+    The maximum likelihood estimator is 
+    \begin{equation*}
+        (\hat{\alpha}, \hat{\beta}) = \argmax_{\alpha, \beta} L(\alpha, \beta).
+    \end{equation*}
+\end{sol}
+%\end{comment}
+
+%\begin{comment}
+\begin{sol}[2.3]
+    On average, the demand of $x_i$ would be
+    \begin{equation*}
+        \Ex{x_i} = \Ex{\frac{\epsilon_i}{p'}} = \frac{1}{p'}\frac{\alpha}{\alpha + \beta}.
+    \end{equation*}
+    \solend
+\end{sol}
+%\end{comment}
+
+
 
 \section{Robinson Crusoe's Coconuts}
 Robinson Crusoe finds $z_0$ units of coconut on the beach in 
@@ -119,7 +163,7 @@ Crusoe's prblem is thus formulated as follows:
 
 %\begin{comment}
 \begin{sol}[3.3]
-    Rearranging the F.O.C. yields 
+    Rearranging the F.O.C.\ yields 
     \begin{equation*}
         c_{t+1} = \beta^2 c_t.
     \end{equation*}
@@ -218,8 +262,13 @@ is
             &= \rho \int \norm{v_1 - v_2} F(dw') = \rho \norm{v_1 - v_2}.
         \end{aligned}
     \end{equation*}
-    Thus $T$ is a contraction mapping. \solend \\
-    \textit{An Alternative Approach:} \\
+    Thus $T$ is a contraction mapping. 
+    \solend
+\end{sol}
+%\end{comment}
+
+%\begin{comment}
+\begin{sol}[Alternative Approach for 4.2]
     One may observe that there exists a ``reservation wage'', $\Bar{w}$, 
     where the worker is indifferent between accepting and rejecting the 
     offer. That is,
@@ -234,11 +283,6 @@ is
     \begin{equation*}
         \Bar{w} = (1-\rho)\underbar{c} + \rho \int \max\brc{w', \Bar{w}} F(dw').
     \end{equation*}
-\end{sol}
-%\end{comment}
-
-%\begin{comment}
-\begin{sol}[4.2. Conti]
     Define the new operator $U$ defined on $[0,1]$ as 
     \begin{equation*}
         U\Bar{w} = (1-\rho)\underbar{c} + \rho \int \max\brc{w', \Bar{w}} F(dw').

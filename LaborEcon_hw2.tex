@@ -64,6 +64,43 @@ factor $\beta\in(0,1)$, Crusoe's problem is
     Explain your findings. 
 \end{enumerate}
 
+\begin{sol}[1.1]
+    The Bellman equation is 
+    \begin{equation*}
+        v(y) = \max_{c} u(c) + \beta \int v(zf(y-c)) F(dz),
+    \end{equation*}
+    where $F$ stands for the CDF of $z$. The Bellman operator is 
+    \begin{equation*}
+        (Tv)(y) = \max_{c} u(c) + \beta \int v(zf(y-c)) F(dz).
+    \end{equation*}
+    \solend
+\end{sol}
 
+\begin{sol}[1.2]
+    We are going to check the conditions in Blackwell's Theorem are 
+    satisfied. First, if $v\leq w$, $v,w\in B(X)$, let $c_v$ and 
+    $c_w$ be the optimal in Bellman equations for $v$ and $w$, respectively. 
+    Then 
+    \begin{equation*}
+        \begin{aligned}
+            Tv(y) 
+            &= u(c_v) + \beta\int v(zf(y-c_v))\phi(dz)\\
+            &\leq u(c_v) + \beta\int w(zf(y-c_v))\phi(dz)\\
+            &\leq u(c_w) + \beta\int w(zf(y-c_w))\phi(dz) = Tw(y).
+        \end{aligned}
+    \end{equation*} 
+    Thus the monotonicity is satisfied. Second, for any $a\in\R_+$, 
+    \begin{equation*}
+        \begin{aligned}
+            T(v+a)(y) 
+            &= \max_c u(c) + \beta\int (v+a)(zf(y-c))\phi(dz)\\
+            &= \max_c u(c) + \beta\int v(zf(y-c))+a \phi(dz)
+            = Tv(y) + \beta a.
+        \end{aligned}
+    \end{equation*}
+    Note that here by $(v+a)(y)$ we mean $v(y) + a$. This completes 
+    the proof.
+    \solend
+\end{sol}
 
 \end{document}
