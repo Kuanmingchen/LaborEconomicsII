@@ -119,8 +119,8 @@ begin
         Random.seed!(2024)
         job_finding_time = simulate(w̄)
         ax = Axis(f5[cld(i, 2), 2 - (i % 2)])
-        xlims!(ax, 1, 200)
-        ylims!(ax, 0, 0.20)
+        xlims!(ax, 1, 100)
+        ylims!(ax, 0, 0.15)
         hist!(ax, job_finding_time, color = :green, strokewidth = 0, normalization = :pdf)
         ax.title = "c̲ = $(c̲_vals[i])"
     end 
