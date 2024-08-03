@@ -5,7 +5,7 @@
 
 # Load Packages
 using CairoMakie
-using Random, Interpolations, NLsolve
+using Random, Interpolations, NLsolve, Roots
 using Statistics, BenchmarkTools, Parameters, Optim
 
 
@@ -13,7 +13,7 @@ using Statistics, BenchmarkTools, Parameters, Optim
 Random.seed!(1234)
 # Define Parameters
 function OptimalGrowth(;β = 0.96, α = 0.8, γ = 1.0, μ = 0.0, σ = 0.3, 
-                        y_grids = collect(range(1e-10, 10.0, length = 100)), 
+                        y_grids = collect(range(1e-5, 10.0, length = 100)), 
                         z = exp.(μ .+ σ .* randn(300)))
     u(c) = γ == 1.0 ? log(c) : c^(1-γ)/(1-γ)
     f(k) = k ≥ 0 ? k^α : 0.0
@@ -58,8 +58,9 @@ function VFI(v; OG = OG, tol = 1e-10, max_iter = 1000)
     return (;v = res.zero, policy = T(res.zero).policy, iter = res.iterations)
 end
 
-sol = VFI(zeros(length(OG.y_grids)))
+sol_vfi = VFI(zeros(length(OG.y_grids)))
 
+# For policy function iteration
 # Define T_policy
 function T_policy(v; OG = OG, policy = policy)
     @unpack β, α, γ, μ, σ, y_grids, z, u, f = OG
@@ -72,9 +73,87 @@ function T_policy(v; OG = OG, policy = policy)
 end
 
 # Solve the model using policy function iteration 
+function compute_v_policy(policy; OG = OG, tol = 1e-10, max_iter = 1000)
+    @unpack β, α, γ, μ, σ, y_grids, z, u, f = OG
+    res = fixedpoint(v -> T_policy(v; policy = policy), zeros(length(y_grids)); iterations = max_iter, xtol = tol) 
+    return res.zero
+end
+
+function compute_v_policy_opt(policy; OG = OG, tol = 1e-10, max_iter = 1000)
+    @unpack β, α, γ, μ, σ, y_grids, z, u, f = OG
+    v_policy = compute_v_policy(policy)
+    policy_new = similar(v_policy)
+    v_func = LinearInterpolation(y_grids, v_policy, extrapolation_bc = Line())
+    for (i, y) in enumerate(y_grids)
+        objective(c) = u(c) + β * mean(v_func.(z .* f(y - c)))
+        res = maximize(objective, tol, y)
+        policy_new[i] = Optim.maximizer(res)
+    end
+    return policy_new
+end
+
+function PFI(policy; OG = OG, tol = 1e-10, max_iter = 1000)
+    @unpack β, α, γ, μ, σ, y_grids, z, u, f = OG
+    res = fixedpoint(policy -> compute_v_policy_opt(policy), policy; iterations = max_iter, xtol = tol)
+    return res.zero
+end
+
+sol_pfi = PFI(0.5*OG.y_grids)
+
+# Solve the model using the envelope condition methods
+function K(policy; OG = OG)
+    @unpack β, α, γ, μ, σ, y_grids, z, u, f = OG
+    policy_new = similar(policy)
+    policy_func = LinearInterpolation(y_grids, policy, extrapolation_bc = Line())
+    # Define the derivatives. One can try autodiff here.
+    Du(c) = c^(-γ)
+    Df(k) = k ≥ 0 ? α * k^(α-1) : 0.0
+    for (i, y) in enumerate(y_grids)
+        obj(c) = Du(c) - β * mean(Du.(policy_func.(z .* f(y - c))) .* z .* Df(y - c))
+        policy_new[i] = find_zero(obj, (1e-10, y - 1e-10))
+    end
+    return policy_new
+end
+
+function ECM(policy; OG = OG, tol = 1e-10, max_iter = 1000)
+    @unpack β, α, γ, μ, σ, y_grids, z, u, f = OG
+    res = fixedpoint(policy -> K(policy), policy; iterations = max_iter, xtol = tol, m = 1)
+    return res.zero
+end
+
+sol_ecm = ECM(0.5*OG.y_grids)
+
+# Solve the model using the endogenous grid method
+function K_EGM(policy; OG = OG, k_grids = collect(range(1e-6, 0.5, length = 100)))
+    @unpack β, α, γ, μ, σ, y_grids, z, u, f = OG
+    c = similar(policy)
+    policy_new = similar(policy)
+    policy_func = LinearInterpolation(y_grids, policy, extrapolation_bc = Line())
+    # Define the derivatives. One can try autodiff here.
+    Du(c) = c^(-γ)
+    Df(k) = k ≥ 0 ? α * k^(α-1) : 0.0
+    Du_inv(y) = y^γ 
+    for (i, k) in enumerate(k_grids)
+        c[i] = Du_inv(β * mean(Du.(policy_func.(z .* f(k))) .* z .* Df(k)))
+    end
+    y = k_grids + c
+    c_perm = c[sortperm(y)]
+    c_func = LinearInterpolation(sort(y), c_perm, extrapolation_bc = Line()) 
+    policy_new = c_func.(y_grids)
+    return (;policy = policy_new, y = sort(y))
+end
+
+function EGM(policy; OG = OG, tol = 1e-10, max_iter = 1000)
+    @unpack β, α, γ, μ, σ, y_grids, z, u, f = OG
+    res = fixedpoint(policy -> K_EGM(policy).policy, 0.5*y_grids; iterations = max_iter, xtol = tol, m = 1)
+    return (;policy = res.zero, y = K_EGM(res.zero).y)
+end
+
+sol_egm, y = EGM(0.5*OG.y_grids)
 
 
-# Plot the policy function 
+
+# Plot the policy functions 
 begin
     fig = Figure()
     ax = Axis(fig[1, 1])
