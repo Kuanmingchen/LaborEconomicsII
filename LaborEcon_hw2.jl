@@ -43,7 +43,7 @@ begin
     v_0 = zeros(length(OG.y_grids))
     v_1 = similar(v_0)
     fig = Figure()
-    ax = Axis(fig[1, 1])
+    ax = Axis(fig[1, 1], title = "Convergence of VFI", xlabel = "y", ylabel = "v")
     for i in 1:n
         v_1 = T(v_0).v
         lines!(ax, OG.y_grids, v_1, color = RGBAf(0.0 + i/n, 0.2, 0.5), linewidth = 2.0)
@@ -58,7 +58,7 @@ function VFI(v; OG = OG, tol = 1e-10, max_iter = 1000)
     return (;v = res.zero, policy = T(res.zero).policy, iter = res.iterations)
 end
 
-sol_vfi = VFI(zeros(length(OG.y_grids)))
+sol_vfi = VFI(zeros(length(OG.y_grids))).policy
 
 # For policy function iteration
 # Define T_policy
@@ -124,41 +124,57 @@ end
 sol_ecm = ECM(0.5*OG.y_grids)
 
 # Solve the model using the endogenous grid method
-function K_EGM(policy; OG = OG, k_grids = collect(range(1e-6, 0.5, length = 100)))
+function K_EGM(policy; OG = OG, k_grids = collect(range(1e-6, 10.0, length = 100)))
     @unpack β, α, γ, μ, σ, y_grids, z, u, f = OG
     c = similar(policy)
     policy_new = similar(policy)
     policy_func = LinearInterpolation(y_grids, policy, extrapolation_bc = Line())
     # Define the derivatives. One can try autodiff here.
     Du(c) = c^(-γ)
-    Df(k) = k ≥ 0 ? α * k^(α-1) : 0.0
-    Du_inv(y) = y^γ 
+    Df(k) = α * k^(α-1)
+    Du_inv(x) = x^(-1/γ) 
     for (i, k) in enumerate(k_grids)
         c[i] = Du_inv(β * mean(Du.(policy_func.(z .* f(k))) .* z .* Df(k)))
     end
     y = k_grids + c
-    c_perm = c[sortperm(y)]
-    c_func = LinearInterpolation(sort(y), c_perm, extrapolation_bc = Line()) 
+    c_func = LinearInterpolation(y, c, extrapolation_bc = Line())
     policy_new = c_func.(y_grids)
-    return (;policy = policy_new, y = sort(y))
+    return policy_new
 end
 
 function EGM(policy; OG = OG, tol = 1e-10, max_iter = 1000)
     @unpack β, α, γ, μ, σ, y_grids, z, u, f = OG
-    res = fixedpoint(policy -> K_EGM(policy).policy, 0.5*y_grids; iterations = max_iter, xtol = tol, m = 1)
-    return (;policy = res.zero, y = K_EGM(res.zero).y)
+    res = fixedpoint(policy -> K_EGM(policy), policy; iterations = max_iter, xtol = tol, m = 1)
+    return res.zero
 end
 
-sol_egm, y = EGM(0.5*OG.y_grids)
+sol_egm = EGM(0.5*OG.y_grids)
 
+# Compare the speed of different methods
+@benchmark VFI(zeros(length(OG.y_grids))) # 363.003 ms
+@benchmark PFI(0.5*OG.y_grids) # 49.664 s
+@benchmark ECM(0.5*OG.y_grids) # 295.850 ms
+@benchmark EGM(0.5*OG.y_grids) # 9.494 ms
 
+# One may see that the endogenous grid method is much faster than 
+# the other methods. PFI seems to be the slowest one; however, 
+# this is largely fue to our problem setup. Since the expectation 
+# operator here cannot be represented by a matrix, we have to 
+# use contraction mapping theorem to solve the problem. For 
+# problems with finite state space, PFI can be much faster, which 
+# we would see in future exercises.
 
+# Compare the soutions
 # Plot the policy functions 
 begin
     fig = Figure()
-    ax = Axis(fig[1, 1])
-    lines!(ax, OG.y_grids, sol.policy, color = :blue, linewidth = 2.0)
-    lines!(ax, OG.y_grids, OG.y_grids*(1-OG.β*OG.α), color = :red, linewidth = 2.0)
+    ax = Axis(fig[1, 1], title = "Policy Functions", xlabel = "y", ylabel = "c")
+    lines!(ax, OG.y_grids, sol_vfi, color = :blue, linewidth = 2.0, label = "VFI")
+    lines!(ax, OG.y_grids, sol_pfi, color = :red, linewidth = 2.0, label = "PFI")
+    lines!(ax, OG.y_grids, sol_ecm, color = :green, linewidth = 2.0, label = "ECM")
+    lines!(ax, OG.y_grids, sol_egm, color = :orange, linewidth = 2.0, label = "EGM")
+    lines!(ax, OG.y_grids, OG.y_grids * (1 - OG.α*OG.β), color = :purple, linewidth = 2.0, label = "Analytic", linestyle = :dash)
+    Legend(fig[1, 2], ax)
     fig
 end
 
@@ -166,12 +182,18 @@ end
 σ_vals = 0.1:0.05:0.3
 begin 
     fig = Figure()
-    ax = Axis(fig[1, 1])
+    ax = Axis(fig[1, 1], title = "Policy Functions with Different σ", xlabel = "y", ylabel = "c")
     for (i, σ) in enumerate(σ_vals)
         Random.seed!(9527)
         OG = OptimalGrowth(;σ = σ, γ = 1.5)
         sol = VFI(zeros(length(OG.y_grids)))
-        lines!(ax, OG.y_grids, sol.policy, color = RGBAf(0.0 + i/length(σ_vals), 0.2, 0.5), linewidth = 2.0)
+        lines!(ax, OG.y_grids, sol.policy, color = RGBAf(0.0 + i/length(σ_vals), 0.2, 0.5), linewidth = 2.0, label = "σ = $σ")
     end
+    Legend(fig[1, 2], ax)
     fig
 end
+
+# As we can see, the more volatile the income is, the more precautionary 
+# saving the agent would have. This is due to the fact that the agent with 
+# CRRA utility has a positive third order derivative for γ > 0. Such 
+# preference is called prudence. 
