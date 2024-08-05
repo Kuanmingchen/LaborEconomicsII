@@ -1,0 +1,94 @@
+\documentclass[12pt]{article}
+\input{prefix.tex}%
+\input{symbols.tex}
+
+\title{
+    Labor Economics Homework 3 \\
+    \large Due: \\
+    }
+
+\author{}
+
+\date{}
+
+\begin{document}
+\setstretch{1.2}
+
+\maketitle
+\vspace{-2cm}
+
+\section{Estimation of McCall's Job Search Model} 
+Recall our settings from homework 1. An unemployed worker solves the 
+following Bellman equation:
+\begin{equation*}
+    v(w) = \max_{s} sw + (1-s)\sbrc{\underbar{c} + \rho \int v(w') F(dw')},
+\end{equation*}
+where $F$ is the CDF of the wage offer distribution $Beta(\alpha, \beta)$.
+\begin{enumerate}
+    \item Use the parameters in homework 1.3 to simulate the data 
+    for one period, i.e., $\set{(w_i, s_i)}_{i=1}^{1000}$. 
+    Note that we do not observe the wage if $s_i = 0$.
+    \item Compute the mean wage among those who are employed. Is the mean wage you computed
+    close with the mean wage in the distribution of wage offers? \\
+    (Hint: $X\overset{iid}{\sim}Beta(\alpha, \beta)$ implies $\Ex{X} = \frac{\alpha}{\alpha + \beta}$.)
+    \item Estimate the wage distribution parameters $\alpha$ and $\beta$ by MLE. \\
+    (Hint: The observed wage follows a truncated beta distribution.) 
+    \item We do know $\underbar{c} = 0.1$ since it is the unemployment benefit. 
+    Estimate $\rho$.
+\end{enumerate}
+
+%\begin{comment}
+\begin{sol}[1.1, 1.2, 1.4]
+    See the Julia code file.
+\end{sol} 
+%\end{comment}
+
+%\begin{comment}
+\begin{sol}[1.3]
+    Notice that the reservation wage $\Bar{w}$ is the threshold. The MLE estimator is 
+    \begin{equation*}
+        \argmax_{\alpha, \beta, \Bar{w}} \sum_{i=1}^{1000} s_i\log \frac{f(w_i)}{1 - F(\Bar{w})} + (1-s_i)\log F(\Bar{w}),
+    \end{equation*}
+    where $f$ is the PDF of the beta distribution and $F$ is the CDF. Implementation is in the Julia code file.
+\end{sol}
+%\end{comment}
+
+
+\section{Estimation of Crusoe's Coconuts Model}
+Recall our settings from homework 2. Crusoe solves the following Bellman equation: 
+\begin{equation*}
+    v(y) = \max_{c} u(c) + \beta \int v(y') F(dy'\mid y, c),
+\end{equation*}
+where $F(dy'\mid y, c)$ is the transition probability from $y$ to $y'$ given $c$, 
+with the law of motion $y' = zf(y - c)$, $f(k) = k^\alpha$ and $\log z\overset{iid}{\sim} N(0, \sigma^2)$.
+\begin{enumerate}
+    \item Use the parameters in homework 2.3 to simulate the time series data 
+    $\set{(y_t, k_t, c_t)}_{t=1}^{200}$. 
+    \item Estimate the production process parameters $\alpha$, $\mu$ and $\sigma$. 
+    \item Prove that $\beta$ and $\gamma$ are not jointly identified. 
+    \item Now suppose that you know $\beta = 0.96$. Estimate $\gamma$ by SMM. What 
+    moment conditions would you use?
+\end{enumerate}
+%\begin{comment}
+\begin{sol}[1.1, 1.2]
+    See the Julia code file.
+\end{sol} 
+%\end{comment}
+
+%\begin{comment}
+\begin{sol}[1.3]
+    Notice that the Bellman equation is
+\end{sol}
+%\end{comment}
+
+%\begin{comment}
+\begin{sol}[1.4]
+    There are many possible moment conditions. One possible choice is
+    \begin{equation*}
+        \Ex{y_{t+1} - \gamma y_t} = 0.
+    \end{equation*}
+    Implementation is in the Julia code file.
+\end{sol}
+%\end{comment}
+
+\end{document}
