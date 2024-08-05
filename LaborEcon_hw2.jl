@@ -158,13 +158,13 @@ sol_egm = EGM(0.5*OG.y_grids)
 
 # One may see that the endogenous grid method is much faster than 
 # the other methods. PFI seems to be the slowest one; however, 
-# this is largely fue to our problem setup. Since the expectation 
+# this is largely due to our problem setup. Since the expectation 
 # operator here cannot be represented by a matrix, we have to 
 # use contraction mapping theorem to solve the problem. For 
 # problems with finite state space, PFI can be much faster, which 
 # we would see in future exercises.
 
-# Compare the soutions
+# Compare the solutions
 # Plot the policy functions 
 begin
     fig = Figure()
@@ -178,7 +178,7 @@ begin
     fig
 end
 
-# Set σ = 0.1, 0.15, ..., 0.6
+# Set σ = 0.1, 0.15, ..., 0.3
 σ_vals = 0.1:0.05:0.3
 begin 
     fig = Figure()
