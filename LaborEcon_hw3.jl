@@ -1,5 +1,5 @@
 #--------------------------------------------------
-# Code for Labor Economics Homework 2 
+# Code for Labor Economics Homework 3 
 # Version: v"1.10.4"
 #--------------------------------------------------
 
@@ -77,8 +77,8 @@ res = optimize(θ -> -log_likelihood(θ), zeros(2))
 begin
     fig1 = Figure()
     ax1 = Axis(fig1[1,1], title = "Wage Distribution", xlabel = "w")
-    lines!(ax1, 0:0.01:1, pdf(Beta(exp.(res.minimizer)...), 0:0.01:1), color = :blue, label = "MLE")
-    lines!(ax1, 0:0.01:1, pdf(Beta(McCall_model.α, McCall_model.β), 0:0.01:1), color = :red, label = "True")
+    lines!(ax1, 0.0:0.001:1.0, pdf(Beta(exp.(res.minimizer)...), 0.0:0.001:1.0), color = :blue, label = "MLE")
+    lines!(ax1, 0.0:0.001:1.0, pdf(Beta(McCall_model.α, McCall_model.β), 0.0:0.001:1.0), color = :red, label = "True")
     Legend(fig1[1,2], ax1)
     fig1
 end
@@ -197,4 +197,14 @@ begin
     lines!(ax3, 1:200, df_2.k, color = :orange, label = "k")
     Legend(fig3[1,2], ax3)
     fig3
+end
+
+# Compare the policy function
+begin
+    fig4 = Figure()
+    ax4 = Axis(fig4[1,1], title = "Policy Function", xlabel = "y")
+    lines!(ax4, OG.y_grids, sol, color = :blue, label = "ĉ(y)")
+    lines!(ax4, OG.y_grids, sol_egm, color = :green, label = "c*(y)")
+    Legend(fig4[1,2], ax4)
+    fig4
 end
