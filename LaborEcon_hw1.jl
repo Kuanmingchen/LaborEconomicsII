@@ -11,7 +11,7 @@ using Parameters, NLsolve
 # For reproducibility
 rng = Xoshiro(9527)
 # Define Parameters
-function McCall(;ρ = 0.95, c̲ = 0.1, α = 2.0, β = 5.0, rng = rng)
+function McCall(;ρ = 0.9, c̲ = 0.1, α = 2.0, β = 5.0, rng = rng)
     return (; ρ, c̲, α, β, ϵ = rand(rng, Beta(α, β), 3000), w_grids = collect(0.0:0.01:1.0))
 end
 

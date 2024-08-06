@@ -197,3 +197,33 @@ end
 # saving the agent would have. This is due to the fact that the agent with 
 # CRRA utility has a positive third order derivative for γ > 0. Such 
 # preference is called prudence. 
+
+# Extra: Simulation of γ
+γ_vals = 0.5:0.1:1.5
+begin 
+    fig = Figure()
+    ax = Axis(fig[1, 1], title = "Policy Functions with Different γ", xlabel = "y", ylabel = "c")
+    for (i, γ) in enumerate(γ_vals)
+        Random.seed!(9527)
+        OG = OptimalGrowth(;γ = γ)
+        sol = VFI(zeros(length(OG.y_grids)))
+        lines!(ax, OG.y_grids, sol.policy, color = RGBAf(0.0 + i/length(γ_vals), 0.2, 0.5), linewidth = 2.0, label = "γ = $γ")
+    end
+    Legend(fig[1, 2], ax)
+    fig
+end
+
+# Extra: Simulation of β
+β_vals = 0.7:0.05:0.95
+begin 
+    fig = Figure()
+    ax = Axis(fig[1, 1], title = "Policy Functions with Different β", xlabel = "y", ylabel = "c")
+    for (i, β) in enumerate(β_vals)
+        Random.seed!(9527)
+        OG = OptimalGrowth(;β = β)
+        sol = VFI(zeros(length(OG.y_grids)))
+        lines!(ax, OG.y_grids, sol.policy, color = RGBAf(0.0 + i/length(β_vals), 0.2, 0.5), linewidth = 2.0, label = "β = $β")
+    end
+    Legend(fig[1, 2], ax)
+    fig
+end
