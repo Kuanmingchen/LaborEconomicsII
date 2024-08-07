@@ -1,0 +1,42 @@
+\documentclass[12pt]{article}
+\input{prefix.tex}%
+\input{symbols.tex}
+
+\title{
+    Labor Economics Homework 4 \\
+    \large Due: \\
+    }
+
+\author{}
+
+\date{}
+
+\begin{document}    
+\setstretch{1.2}
+
+\maketitle
+\vspace{-2cm}
+
+\section{Occpational Choice Model}
+Suppose a worker $i$ chooses an occupation $j\in\set{0,1,\ldots,J}$ 
+to maximize the utility function 
+\begin{equation*}
+    u_i(j) = \alpha_j + \epsilon_{ij},
+\end{equation*}
+where $\epsilon_{ij}\overset{iid}{\sim}T1EV$ across workers and occupations 
+that is observed only by the individual but not us. $\alpha_j$ is the 
+parameter that we want to estimate. We normalize $\alpha_0 = 0$.
+\begin{enumerate}
+    \item What is the probability of observing a worker in occupation $j$?
+    \item Use the parameters $(\alpha_1, \alpha_2, \alpha_3) = (0.2, 0.3, -0.1)$ 
+    to simulate the data for $1000$ workers and $J=3$ occupations.
+    \item Estimate the parameters $\alpha_j$. Can you recover the true parameters?
+    \item Use the estimated parameters to simulate $1000$ samples. 
+    Drop the occupation $j=3$ and resimulate $1000$ samples. Compare the 
+    $\Pr(j=1)/\Pr(j=2)$ in the two scnarios.  
+\end{enumerate}
+
+\section{Bus Engine Replacement Model}
+
+
+\end{document}
