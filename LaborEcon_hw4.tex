@@ -30,10 +30,14 @@ parameter that we want to estimate. We normalize $\alpha_0 = 0$.
     \item What is the probability of observing a worker in occupation $j$?
     \item Use the parameters $(\alpha_1, \alpha_2, \alpha_3) = (0.2, 0.3, -0.1)$ 
     to simulate the data for $1000$ workers and $J=3$ occupations.
-    \item Estimate the parameters $\alpha_j$. Can you recover the true parameters?
+    \item Derive the likelihood function for the parameters $\alpha_j$.
+    \item Estimate the parameters $\alpha_j$ via MLE. Can you recover the true 
+    parameters?
     \item Use the estimated parameters to simulate $1000$ samples. 
-    Drop the occupation $j=3$ and resimulate $1000$ samples. Compare the 
-    $\Pr(j=1)/\Pr(j=2)$ in the two scnarios.  
+    Drop the occupation $j=3$ and resimulate $1000$ samples. Compare  
+    $\frac{\sum_{i=1}^{1000}\mathds{1}\brc{D_i=1}}{\sum_{i=1}^{1000}\mathds{1}\brc{D_i=2}}$ 
+    in the two scnarios, where $D_i\in \set{0,\ldots,J}$ is the occupation 
+    that worker $i$ chooses.
 \end{enumerate}
 
 \section{Bus Engine Replacement Model}
