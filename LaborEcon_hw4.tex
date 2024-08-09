@@ -38,7 +38,7 @@ parameter that we want to estimate. We normalize $\alpha_0 = 0$.
 \end{enumerate}
 %\begin{comment}
 \begin{sol}[1.1]
-    By the $T1EV$ assumption, we have 
+    By the $\it{T1EV}$ assumption, we have 
     \begin{equation*}
         \Pr(D_i = j) = \Pr(\alpha_j + \epsilon_{ij} > \alpha_k + \epsilon_{ik} \text{ for all } k\neq j) = \frac{\exp(\alpha_j)}{\sum_{k=0}^{J}\exp(\alpha_k)}.
     \end{equation*}
@@ -79,30 +79,36 @@ parameter that we want to estimate. We normalize $\alpha_0 = 0$.
 
 \section{Inventory Dynamics}
 Consider a firm has a warehouse to store its inventory with 
-a capacity of $S$ units. The firm faces demand $D_t$ in each 
-period $t$. In each period, the firm can choose to 
-restock ($s_t = 1$) the inventory to $S$ units or not ($s_t = 0$). 
-The profit flow is 
+a capacity of $S$ units. The time line in each period goes as follows: 
+At the beginning of period $t$, the firm observes the inventory $I_t$ and 
+$\epsilon_{0t}, \epsilon_{1t}$ but not the demand $D_t$. The firm then decides 
+whether to restock ($s_t = 1$) the inventory to $S$ units or not ($s_t = 0$). 
+After the decision, the firm pays the storage cost $c$. Finally, the firm 
+observes $D_t$ and the profit flow is realized. The profit flow is 
 \begin{equation*}
-    \pi(s_t, I_t, \epsilon_{1t}, \epsilon_{0t}) = 
+    \pi(s_t, I_t, D_t) = 
     \begin{cases*}
-        pD_t - cS - h(S - I_t) + \epsilon_{1t} & if $s_t = 1$, \\
-        p\min\brc{D_t, I_t} - cI_t + \epsilon_{0t} & if $s_t = 0$,
+        pD_t - cS - h(S - I_t)  & if $s_t = 1$, \\
+        p\min\brc{D_t, I_t} - cI_t  & if $s_t = 0$,
     \end{cases*}
 \end{equation*}  
 where $I_t$ is the inventory level at the beginning of period $t$, 
 $p$ is the price of the product, $c$ is the cost of holding one unit 
-of inventory, $\epsilon_{st}$ are random terms iid across choice and 
-time following $T1EV$ distribution. Notice that $\epsilon_{st}$ is 
-observed by the firm but not us. $h$ is the cost of restocking with 
+of inventory. $h$ is the cost of restocking with 
 \begin{equation*}
     h(x) = \theta_0 + \theta_1x.
 \end{equation*}
+Let $\epsilon_t(s)$ be random term iid across choice and 
+time following $\it{T1EV}$ distribution. We normalize it as 
+\begin{equation*}
+    \epsilon_t(s) = -\gamma + s\epsilon_{1t} + (1-s)\epsilon_{0t}.
+\end{equation*}
+Remark that $\epsilon_t$ is observed by the firm but not us.
 The law of motion for the inventory level is 
 \begin{equation*}
     I_{t+1} = 
     \begin{cases*}
-        S & if $s_t = 1$, \\
+        S - D_t & if $s_t = 1$, \\
         \max\brc{0,I_t - D_t} & if $s_t = 0$.
     \end{cases*}
 \end{equation*}
@@ -118,15 +124,89 @@ The law of motion for the inventory level is
     iteration. \\
     (Hint: In $T_\sigma$ step, $v_\sigma = (I-\rho Q_\sigma)^{-1}\pi_\sigma$, where $Q_\sigma$ is the transition matrix 
     given the policy and $\pi_\sigma$ is the profit flow given the policy.)
-    \item Simulate the data $\set{(\min\brc{D_t, I_t}, I_t, s_t)}_{t=1}^{500}$. Estimate the 
-    transition matrix parameters $\alpha$ and $\beta$ for the inventory level $I_t$ 
-    using the data. 
+    \item The above two methods are fundamental. For this problem, with some additional assumptions, 
+    it is possible to solve the model faster. Assume that the shock $\epsilon_{t+1}$ and the demand $D_t$ are 
+    conditionally independent, i.e., 
+    \begin{equation*}
+        \Pr(I_{t+1}\mid \epsilon_t, I_t, s_t) = \Pr(I_{t+1}\mid I_t, s_t).
+    \end{equation*}  
+    Derive the function equation
+    \begin{equation*}
+        \E_\epsilon\sbrc{v(I)} = \log\brc{\sum_{s\in\set{0,1}}\exp\sbrc{\E_D\sbrc{\pi(s,I,D)} + \rho\sum_{I'}(\E_\epsilon\sbrc{v(I')})Q(I', I, s)}},
+    \end{equation*}
+    where $\gamma$ is the Euler-Mascheroni constant. Note that iterating on this equation forms the inner loop of the NFXP algorithm.
+    \item Simulate the data $\set{(\min\brc{D_t, I_t}, I_t, s_t)}_{t=1}^{500} = \set{(d_t, I_t, s_t)}_{t=1}^{500}$. 
+    Estimate the transition matrix parameters $\alpha$ and $\beta$ for the inventory level $I_t$ 
+    using the simulated data.  
     \item Estimate the parameters $(p,c,\theta_0,\theta_1,\rho)$ using NFXP algorithm. 
     \item Estimate the parameters $(p,c,\theta_0,\theta_1,\rho)$ using CCP.
     \item Simulate and plot the inventory level $I_t$ against $t$ for $100$ periods for 
     different price levels $p\in\set{1.1, 1.3, 1.5}$ and storage cost $c\in\set{0.8, 1.0, 1.2}$. 
     Explain your findings.
 \end{enumerate}
-
+%\begin{comment}
+\begin{sol}[1.1, 1.3, 1.4, 1.9]
+    See the Julia code file.
+    \solend
+\end{sol}
+%\end{comment}
+%\begin{comment}
+\begin{sol}[1.2]
+    The Bellman equation is 
+    \begin{equation*}
+        v(I_t, \epsilon_t) = \max_{s_t}\brc{\E_D\sbrc{\pi(s_t, I_t, D_t)} + \epsilon_t(s) + \rho\sum_{I_{t+1}, \epsilon_{t+1}}v(I_{t+1}, \epsilon_{t+1})\Pr(I_{t+1}, \epsilon_{t+1}\mid I_t, s_t)}.
+    \end{equation*}
+    \solend
+\end{sol}
+%\end{comment}
+%\begin{comment}
+\begin{sol}[1.5]
+    By the conditional independence assumption, we have 
+    \begin{equation*}
+        \begin{aligned}
+            \E_{(\epsilon_{t+1}, I_{t+1})}\sbrc{v(I_{t+1}, \epsilon_{t+1})}
+            &= \sum_{I_{t+1}, \epsilon_{t+1}} v(I_{t+1}, \epsilon_{t+1}) \Pr(I_{t+1}, \epsilon_{t+1}\mid I_t, s_t) \\
+            &= \sum_{I_{t+1}}\sum_{\epsilon_{t+1}} v(I_{t+1}, \epsilon_{t+1})\Pr(I_{t+1}\mid \epsilon_{t+1}, I_t, s_t)\Pr(\epsilon_{t+1}\mid I_t, s_t)\\
+            &= \sum_{I_{t+1}}\sum_{\epsilon_{t+1}} v(I_{t+1}, \epsilon_{t+1})\Pr(I_{t+1}\mid I_t, s_t)\Pr(\epsilon_{t+1}\mid I_t, s_t)\\
+            &= \sum_{I_{t+1}}\E_{\epsilon_{t+1}}\sbrc{v(I_{t+1}, \epsilon_{t+1})}\Pr(I_{t+1}\mid I_t, s_t).
+        \end{aligned}
+    \end{equation*}
+    Then 
+    \begin{equation*}
+        \begin{aligned}
+            \E_\epsilon\sbrc{v(I,\epsilon)} 
+            &= \int_\epsilon \max_s\brc{\E_D\sbrc{\pi(s,I,D)} + \epsilon(s) + \rho\sum_{I'}\E_\epsilon\sbrc{v(I',\epsilon')}P(I'\mid I, s)}dF(\epsilon)\\ 
+            &= \log\brc{\sum_{s\in\set{0,1}}\exp\sbrc{\E_D\sbrc{\pi(s,I,D)} + \rho\sum_{I'}\E_\epsilon\sbrc{v(I',\epsilon')}Q(I', I, s)}}
+        \end{aligned}
+    \end{equation*}
+    by the $\it{T1EV}$ assumption.
+    \solend
+\end{sol}
+%\end{comment}
+%\begin{comment}
+\begin{sol}[1.6]
+    We derived the likelihood function here. 
+    \begin{equation*}
+        \mathcal{L} = \prod_{t=1}^{500}\Pr(\min\brc{D_t, I_t} = d_t\mid I_t) = \prod_{t=1}^{500}f(d_t)^{\mathds{1}\brc{d_t < I_t}}(1-F(I_t))^{\mathds{1}\brc{d_t = I_t}},
+    \end{equation*}
+    where $f$ is the probability mass function of the Beta-Binomial distribution and $F$ is the cumulative distribution function.
+    \solend
+\end{sol}
+%\end{comment}
+%\begin{comment}
+\begin{sol}[1.7]
+    Once we obtain $\E_\epsilon\sbrc{v(I,\epsilon)}$ for the given parameters, 
+    we can calculate the associated likelihood via 
+    \begin{equation*}
+        \begin{aligned}
+            \mathcal{L} &= \prod_{t=1}^{500}\Pr(\E_D\sbrc{\pi(0,I_t,D)} + \epsilon_t(0) + \rho\sum_{I_{t+1}}\E_\epsilon\sbrc{v(I_{t+1}, \epsilon_{t+1})}Q(I_{t+1}, I_t, 0) \\
+            &\qquad > \E_D\sbrc{\pi(1,I_t,D)} + \epsilon_t(1) + \rho\sum_{I_{t+1}}\E_\epsilon\sbrc{v(I_{t+1})}Q(I_{t+1}, I_t, 1))^{\mathds{1}\brc{s_t = 0}} \\
+            &\quad \times \Pr(\E_D\sbrc{\pi(1,I_t,D)} + \epsilon_t(1) + \rho\sum_{I_{t+1}}\E_\epsilon\sbrc{v(I_{t+1}, \epsilon_{t+1})}Q(I_{t+1}, I_t, 1) \\
+            &\qquad > \E_D\sbrc{\pi(0,I_t,D)} + \epsilon_t(0) + \rho\sum_{I_{t+1}}\E_\epsilon\sbrc{v(I_{t+1})}Q(I_{t+1}, I_t, 0))^{\mathds{1}\brc{s_t = 1}}\\
+            &= \prod_{t=1}^{500}\prod_{s} \brc{\frac{\E_D\sbrc{\pi(s,I_t,D)} + \rho\sum_{I_{t+1}}\E_\epsilon\sbrc{v(I_{t+1}, \epsilon_{t+1})}Q(I_{t+1}, I_t, s)}{\sum_{s'} \exp\sbrc{\E_D\sbrc{\pi(s',I_t,D)} + \rho\sum_{I_{t+1}}\E_\epsilon\sbrc{v(I_{t+1}, \epsilon_{t+1})}Q(I_{t+1}, I_t, s')}}}^{\mathds{1}\brc{s_t = s}}.
+        \end{aligned}
+    \end{equation*}
+    \solend
+\end{sol}
 
 \end{document}
